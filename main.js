@@ -105,8 +105,21 @@ function wordShuffler(array) {
 // event handlers
 function wordHandler(event){
 
-    console.log(`This card belongs to ${event.target.dataset['team']}`)
-    debugger;
+    let teamNumber = event.target.dataset['team'];
+    console.log(`This card belongs to ${teamNumber}`)
+    
+    if(teamNumber==='1'){
+        event.target.style.backgroundColor = 'grey'
+    }
+    else if(teamNumber==='2'){
+        event.target.style.backgroundColor = 'beige'
+    }
+    else if(teamNumber==='3'){
+        event.target.style.backgroundColor = 'red'
+    }
+    else if(teamNumber==='4'){
+        event.target.style.backgroundColor = 'blue'
+    }
 }
 
 
