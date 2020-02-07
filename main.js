@@ -21,12 +21,36 @@ document.addEventListener("DOMContentLoaded", (e)=> {
     });
     fetchTeams();
     fetchWordArray();
-    // const wordArray = fetchWordArray();
-    // debugger;
-    // populateCards(wordArray);
     
 });
 
+function makeMasterKeyCard(gameWords){
+
+    gameWords.forEach(word => renderKeyCards(word))
+}
+
+function renderKeyCards(word){
+    let masterKey = document.getElementById('master-key-card');
+
+    let newClue = document.createElement('div');
+    newClue.innerText = word.name;
+    newClue.dataset.team = word.team_id;
+
+    if(newClue.dataset.team ==='1'){
+        newClue.style.backgroundColor = 'grey';
+    }
+    else if(newClue.dataset.team === '2'){
+        newClue.style.backgroundColor = 'beige';
+    }
+    else if(newClue.dataset.team === '3'){
+        newClue.style.backgroundColor = 'red';
+    }
+    else if(newClue.dataset.team === '4'){
+        newClue.style.backgroundColor = 'blue';
+    }
+    
+    masterKey.appendChild(newClue);
+}
 
 
 function populateCards(wordArray){
@@ -43,7 +67,8 @@ function populateCards(wordArray){
     for(let i = 0; i<gameWords.length; i++){
         renderCard(gameWords[i], i)
     }
-    
+
+    makeMasterKeyCard(gameWords);
 }
 
 function renderCard(word, index){
