@@ -6,16 +6,31 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Codenames</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        
+        <h1 id="codenames-header">Codenames</h1>
+        <div id='master-key-card'>Clue card goes here </div>
+        <p>
+            Team Leader: <button id="master-key-button">See the clue card</button>
+        </p>
+        <div id='turn-indicator'>Turn indicator goes here</div>
+        <div id="red-team-container">Red team</div>
+        <div id='red-team-clue-container'>Red team clue form
+            <form id='red-clue-form'>
+                Red clue form goes here
+            </form>
+        </div>
+        <div id="blue-team-container">Blue team</div>
+        <div id='blue-team-clue-container'>Blue team clue form 
+            <form id='blue-clue-form'>
+                Blue clue form goes here
+            </form>
+        </div>
+        <div id="word-card-container">word cards go here</div>
         <script src="" async defer></script>
         <script src="main.js"></script>
     </body>
