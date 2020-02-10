@@ -2,6 +2,7 @@ let masterKeyShowing = false
 let teamArray;
 let guessLimit
 let wordList = [];
+// let clueGiven = false;
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#2D1F92'
 const teamColorAssasin = '#403251'
@@ -191,7 +192,8 @@ function clueFormHandler(e, currentTeam){
     let clue = e.target.clue.value 
 
     if(wordList.includes(clue.toLowerCase())){
-        alert("You cannot enter a word on the word list!")
+        alert("You cannot enter a word on the word list! It is now the other team's turn.");
+        switchTurn();
     }
     else{
     document.querySelector('#master-key-card').style.display = 'none'
@@ -267,27 +269,27 @@ function fetchTeams(){
 }
 // helpers 
 function setCurrentTurnText(switchTurn){ 
-
     let  div = getCurrentTurn()
-if (!switchTurn){ 
-    if (div.dataset.id === `${teamArray[2].id}`){ 
-        div.innerText = `Its ${teamArray[2].name}'s turn`
-    }
-    else if (div.dataset.id = `${teamArray[3].id}` ){ 
-        
-        div.innerText = `Its ${teamArray[3].name}'s turn`
-    }
-} 
-    else if(switchTurn){ 
-        if (div.dataset.id === `${teamArray[2].id}`){ 
-            div.dataset.id = `${teamArray[3].id}`
-            div.innerText = `Its ${teamArray[3].name}'s turn`
-        }
-        else if (div.dataset.id = `${teamArray[3].id}` ){ 
-            div.dataset.id = `${teamArray[2].id}`
+    guessLimit = 0;
+        if (!switchTurn){ 
+            if (div.dataset.id === `${teamArray[2].id}`){ 
             div.innerText = `Its ${teamArray[2].name}'s turn`
-        }
+            }
+            else if (div.dataset.id = `${teamArray[3].id}` ){ 
+            
+            div.innerText = `Its ${teamArray[3].name}'s turn`
+            }
+        } 
+        else if(switchTurn){ 
+            if (div.dataset.id === `${teamArray[2].id}`){ 
+                div.dataset.id = `${teamArray[3].id}`
+                div.innerText = `Its ${teamArray[3].name}'s turn`
+            }
+            else if (div.dataset.id = `${teamArray[3].id}` ){ 
+                div.dataset.id = `${teamArray[2].id}`
+                div.innerText = `Its ${teamArray[2].name}'s turn`
+            }
 
-    }
+        }
 }
 
