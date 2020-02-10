@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", (e)=> {
     fetchTeams();
     getPassTurnButton().addEventListener('click', switchTurn)
     getClueForm().addEventListener('submit', (e) => clueFormHandler(e,currentTurn() ))
-    
+    getResetButton().addEventListener('click', (e) => resetGameHandler(e))
 });
 
 function currentTurn(){ 
@@ -168,6 +168,7 @@ function wordHandler(event){
         event.target.style.backgroundColor = 'beige'
         guessLimit = 0;
         alert("You've hit a neutral target. Your turn is now ended.")
+        wordHandler(event);
     }
     else if(teamNumber===`${teamArray[2].id}`){
         event.target.style.backgroundColor = teamColorRed
@@ -187,7 +188,7 @@ function wordHandler(event){
             wordHandler(event);
         }
     }
-    alert(`You have ${guessLimit} gueses left.`)
+    alert(`You have ${guessLimit} guesses left.`)
 }
 }
 
@@ -226,6 +227,23 @@ function clueFormHandler(e, currentTeam){
 e.target.reset()
 }
 
+function resetGameHandler(event){
+
+    alert('Resetting game...')
+    teamArray = null;
+    guessLimit = null;
+    wordList = [];
+    deleteChildElements(getWordContainer());
+    deleteChildElements(getCurrentTurn());
+    deleteChildElements(document.getElementById('red-team-ul'));
+    deleteChildElements(document.getElementById('blue-team-ul'));
+    deleteChildElements(document.getElementById('master-key-card'));
+    document.querySelector('#current-turn').dataset.id = ""
+    fetchTeams();
+    // setCurrentTurnText();
+    document.querySelector('#master-key-card').style.display = "none";
+}
+
 
 // element fetchers and url fetchers 
 
@@ -251,6 +269,10 @@ function getPassTurnButton(){
  
 function getClueForm(){ 
     return document.querySelector('#clue-form')
+}
+
+function getResetButton(){
+    return document.querySelector('#reset-game')
 }
 
 // Api fecthes and renders
@@ -303,3 +325,8 @@ function setCurrentTurnText(switchTurn){
         }
 }
 
+function deleteChildElements(parentNode){
+    while (parentNode.firstChild) {
+          parentNode.removeChild(parentNode.firstChild);
+    } 
+}
