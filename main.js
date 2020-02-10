@@ -1,9 +1,11 @@
 let masterKeyShowing = false 
 let teamArray;
-let guessLimit 
+let guessLimit
+let wordList = [];
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#2D1F92'
 const teamColorAssasin = '#403251'
+const teamColorNeutral = 'beige';
 
 document.addEventListener("DOMContentLoaded", (e)=> {
 
@@ -11,6 +13,8 @@ document.addEventListener("DOMContentLoaded", (e)=> {
 
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
+
+    masterKeyCard.style.display = "none";
 
     masterKeyBtn.addEventListener('click', (e) => {
 
@@ -67,7 +71,7 @@ function renderKeyCards(word){
         newClue.style.backgroundColor = teamColorAssasin
     }
     else if(newClue.dataset.team === `${teamArray[1].id}`){
-        newClue.style.backgroundColor = 'beige';
+        newClue.style.backgroundColor = teamColorNeutral;
     }
     else if(newClue.dataset.team === `${teamArray[2].id}`){
         newClue.style.backgroundColor = teamColorRed
@@ -95,7 +99,9 @@ function populateCards(wordArray){
     for(let i = 0; i<gameWords.length; i++){
         renderCard(gameWords[i], i)
     }
-
+    gameWords.forEach(word => {
+        wordList.push(word.name.toLowerCase());
+    })
     makeMasterKeyCard(gameWords);
 }
 
@@ -150,16 +156,28 @@ function wordHandler(event){
     }
     else if(teamNumber===`${teamArray[1].id}`){
         event.target.style.backgroundColor = 'beige'
-        guessLimit--
+        guessLimit = 0;
+        alert("You've hit a neutral target. Your turn is now ended.")
     }
     else if(teamNumber===`${teamArray[2].id}`){
         event.target.style.backgroundColor = teamColorRed
         guessLimit--
+        if(currentTurn()===`${teamArray[3].id}`){
+            guessLimit = 0;
+            alert("You've chosen an opponent team's card! Your turn is now ended.")
+            wordHandler(event);
+        }
     }
     else if(teamNumber===`${teamArray[3].id}`){
         event.target.style.backgroundColor = teamColorBlue
         guessLimit--
+        if(currentTurn()===`${teamArray[2].id}`){
+            guessLimit = 0;
+            alert("You've chosen an opponent team's card! Your turn is now ended.")
+            wordHandler(event);
+        }
     }
+    alert(`You have ${guessLimit} gueses left.`)
 }
 }
 
@@ -170,14 +188,20 @@ function switchTurn(e){
 
 function clueFormHandler(e, currentTeam){ 
     e.preventDefault()
+    let clue = e.target.clue.value 
+
+    if(wordList.includes(clue.toLowerCase())){
+        alert("You cannot enter a word on the word list!")
+    }
+    else{
     document.querySelector('#master-key-card').style.display = 'none'
     masterKeyShowing = false 
 
-    let clue = e.target.clue.value 
-    let guesses = e.target.guesses.value 
+    let guesses = parseInt(e.target.guesses.value);
     let clueEntry = document.createElement('li')
-      guessLimit = guesses
+    guessLimit = guesses + 1 ;
     clueEntry.innerText = `${clue} ${guesses}`
+    alert(`You have ${guessLimit} guesses remaining.`)
     if (currentTeam === `${teamArray[2].id}`){ 
        let ul = document.getElementById('red-team-ul')
        ul.appendChild(clueEntry)
@@ -185,6 +209,7 @@ function clueFormHandler(e, currentTeam){
     else{ 
         let ul = document.getElementById('blue-team-ul')
         ul.appendChild(clueEntry)
+    }
     }
     
 e.target.reset()
@@ -226,7 +251,7 @@ function fetchWordArray(){
     fetch(wordURL())
         .then(response => response.json())
         .then(wordArray => {
-            populateCards(wordArray)
+            populateCards(wordArray);
         currentTurn()})
     
 }
