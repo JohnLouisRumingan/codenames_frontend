@@ -2,7 +2,9 @@ let masterKeyShowing = false
 let teamArray;
 let guessLimit
 let wordList = [];
-// let clueGiven = false;
+let bluePoints;
+let redPoints;
+
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#2D1F92'
 const teamColorAssasin = '#403251'
@@ -38,17 +40,22 @@ function currentTurn(){
     
     
     let div =  getCurrentTurn() 
+
+    //if statement is only for setting a team name at start of game and after resets 
     if (div.dataset.id === ""){ 
         let coinflip = Math.floor(Math.random() * 2) + 1
         if (coinflip === 1){ 
             div.dataset.id = teamArray[2].id
-            
+            redPoints = 9;
+            bluePoints = 8;
             setCurrentTurnText()
             
         }
         else{ 
             
             div.dataset.id = teamArray[3].id
+            bluePoints = 9;
+            redPoints = 8;
             setCurrentTurnText()
         }
         
@@ -97,6 +104,7 @@ function populateCards(wordArray){
     gameWords.slice(1,8).forEach(word => word.team_id = teamArray[1].id)
     
     if (parseInt(firstPlayerTurn) === teamArray[2].id){
+
         gameWords.slice(8,17).forEach( word => word.team_id = teamArray[2].id)
         gameWords.slice(17,25).forEach( word => word.team_id = teamArray[3].id)
     }
@@ -121,6 +129,7 @@ function renderCard(word, index){
     newCardDiv.innerText = word.name;
     newCardDiv.dataset.location = index;
     newCardDiv.dataset.team = word.team_id
+    newCardDiv.className = "word-card";
     newCardDiv.addEventListener('click', (e) => wordHandler(e))
     wordContainer.append(newCardDiv);
     
@@ -152,15 +161,17 @@ function wordHandler(event){
     
      let teamNumber = event.target.dataset['team'];
      console.log(`This card belongs to ${teamNumber}`)
+
+     let chosenWordCard = event.target;
    if (guessLimit === 0){ 
-       alert("Youve run out of clues")
+       alert("You've run out of clues")
        switchTurn()
    } 
    else {
     
     if(teamNumber=== `${teamArray[0].id}`){
         event.target.style.backgroundColor = teamColorAssasin
-       alert("You hit the assasin")
+       alert("You hit the assasin. Game over.")
        guessLimit = 0
        
     }
@@ -173,6 +184,11 @@ function wordHandler(event){
     else if(teamNumber===`${teamArray[2].id}`){
         event.target.style.backgroundColor = teamColorRed
         guessLimit--
+        
+        
+        chosenWordCard.className = "tiny-card";
+        getRedContainer().append(chosenWordCard);
+        
         if(currentTurn()===`${teamArray[3].id}`){
             guessLimit = 0;
             alert("You've chosen an opponent team's card! Your turn is now ended.")
@@ -182,6 +198,11 @@ function wordHandler(event){
     else if(teamNumber===`${teamArray[3].id}`){
         event.target.style.backgroundColor = teamColorBlue
         guessLimit--
+
+        
+        chosenWordCard.className = "tiny-card";
+        getBlueContainer().append(chosenWordCard);
+
         if(currentTurn()===`${teamArray[2].id}`){
             guessLimit = 0;
             alert("You've chosen an opponent team's card! Your turn is now ended.")
@@ -189,6 +210,8 @@ function wordHandler(event){
         }
     }
     alert(`You have ${guessLimit} guesses left.`)
+    countRedCards();
+    countBlueCards();
 }
 }
 
@@ -233,6 +256,8 @@ function resetGameHandler(event){
     teamArray = null;
     guessLimit = null;
     wordList = [];
+    bluePoints = 0;
+    redPoints = 0;
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
@@ -275,6 +300,14 @@ function getResetButton(){
     return document.querySelector('#reset-game')
 }
 
+function getRedContainer(){
+    return document.getElementById('red-team-container')
+}
+
+function getBlueContainer(){
+    return document.getElementById('blue-team-container')
+}
+
 // Api fecthes and renders
 
 function fetchWordArray(){
@@ -305,21 +338,21 @@ function setCurrentTurnText(switchTurn){
     guessLimit = 0;
         if (!switchTurn){ 
             if (div.dataset.id === `${teamArray[2].id}`){ 
-            div.innerText = `Its ${teamArray[2].name}'s turn`
+            div.innerText = `It's ${teamArray[2].name}'s turn`
             }
             else if (div.dataset.id = `${teamArray[3].id}` ){ 
             
-            div.innerText = `Its ${teamArray[3].name}'s turn`
+            div.innerText = `It's ${teamArray[3].name}'s turn`
             }
         } 
         else if(switchTurn){ 
             if (div.dataset.id === `${teamArray[2].id}`){ 
                 div.dataset.id = `${teamArray[3].id}`
-                div.innerText = `Its ${teamArray[3].name}'s turn`
+                div.innerText = `It's ${teamArray[3].name}'s turn`
             }
             else if (div.dataset.id = `${teamArray[3].id}` ){ 
                 div.dataset.id = `${teamArray[2].id}`
-                div.innerText = `Its ${teamArray[2].name}'s turn`
+                div.innerText = `It's ${teamArray[2].name}'s turn`
             }
 
         }
@@ -329,4 +362,19 @@ function deleteChildElements(parentNode){
     while (parentNode.firstChild) {
           parentNode.removeChild(parentNode.firstChild);
     } 
+}
+
+function countRedCards(){
+    let redCards = getRedContainer().childElementCount
+    debugger;
+    if (redCards === redPoints){
+        alert("Red Team has won!")
+    }
+}
+
+function countBlueCards(){
+    let blueCards = getBlueContainer().childElementCount
+    if (blueCards === bluePoints){
+        alert("Blue Team has won!")
+    }
 }

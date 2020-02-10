@@ -9,3 +9,35 @@ button {
     font-size: 18px;
     justify-self: center;
   }
+
+  .word-card {
+    text-align: center;
+    border: grey solid 1px;
+    padding: 1rem;
+    width: 12rem;
+    height: 10rem;
+    display: inline-grid;
+    margin: 1rem 2rem;
+    box-shadow: 3px 4px #337810;
+    font-size: 30px;
+    justify-self: center;
+    line-height: 14rem;
+    background-image: url("https://kid101.com/wp-content/uploads/2017/10/Spy-Training.jpg");
+    background-size: 23rem;
+  }
+
+  .tiny-card {
+    text-align: center;
+    border: grey solid 1px;
+    padding: 1rem;
+    width: 6rem;
+    height: 5rem;
+    display: inline-grid;
+    margin: 1rem 2rem;
+    box-shadow: 3px 4px #337810;
+    font-size: 10px;
+    justify-self: center;
+    line-height: 3rem;
+    background-image: url("https://kid101.com/wp-content/uploads/2017/10/Spy-Training.jpg");
+    background-size: 12rem;
+  }
