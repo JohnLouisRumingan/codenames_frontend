@@ -36,16 +36,16 @@ function renderKeyCards(word){
     newClue.innerText = word.name;
     newClue.dataset.team = word.team_id;
 
-    if(newClue.dataset.team ==='1'){
+    if(newClue.dataset.team ===`${teamArray[0].id}`){
         newClue.style.backgroundColor = 'grey';
     }
-    else if(newClue.dataset.team === '2'){
+    else if(newClue.dataset.team === `${teamArray[1].id}`){
         newClue.style.backgroundColor = 'beige';
     }
-    else if(newClue.dataset.team === '3'){
+    else if(newClue.dataset.team === `${teamArray[2].id}`){
         newClue.style.backgroundColor = 'red';
     }
-    else if(newClue.dataset.team === '4'){
+    else if(newClue.dataset.team === `${teamArray[3].id}`){
         newClue.style.backgroundColor = 'blue';
     }
     
@@ -60,6 +60,7 @@ function populateCards(wordArray){
     let gameWords = randWords.slice(0,10);
     gameWords[0].team_id = teamArray[0].id
     gameWords[1].team_id = teamArray[1].id
+    
     gameWords.slice(2,6).forEach( word => word.team_id = teamArray[2].id)
     gameWords.slice(6,10).forEach( word => word.team_id = teamArray[3].id)
 
@@ -108,16 +109,16 @@ function wordHandler(event){
     let teamNumber = event.target.dataset['team'];
     console.log(`This card belongs to ${teamNumber}`)
     
-    if(teamNumber==='1'){
+    if(teamNumber=== `${teamArray[0].id}`){
         event.target.style.backgroundColor = 'grey'
     }
-    else if(teamNumber==='2'){
+    else if(teamNumber===`${teamArray[1].id}`){
         event.target.style.backgroundColor = 'beige'
     }
-    else if(teamNumber==='3'){
+    else if(teamNumber===`${teamArray[2].id}`){
         event.target.style.backgroundColor = 'red'
     }
-    else if(teamNumber==='4'){
+    else if(teamNumber===`${teamArray[3].id}`){
         event.target.style.backgroundColor = 'blue'
     }
 }
