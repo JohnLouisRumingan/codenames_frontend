@@ -87,14 +87,23 @@ function renderKeyCards(word){
 
 function populateCards(wordArray){
     
+    let firstPlayerTurn = currentTurn();
     let randWords = wordShuffler(wordArray);
     console.log(randWords);
-    let gameWords = randWords.slice(0,10);
+    let gameWords = randWords.slice(0,25);
     gameWords[0].team_id = teamArray[0].id
-    gameWords[1].team_id = teamArray[1].id
+
+    // gameWords[1].team_id = teamArray[1].id
+    gameWords.slice(1,8).forEach(word => word.team_id = teamArray[1].id)
     
-    gameWords.slice(2,6).forEach( word => word.team_id = teamArray[2].id)
-    gameWords.slice(6,10).forEach( word => word.team_id = teamArray[3].id)
+    if (parseInt(firstPlayerTurn) === teamArray[2].id){
+        gameWords.slice(8,17).forEach( word => word.team_id = teamArray[2].id)
+        gameWords.slice(17,25).forEach( word => word.team_id = teamArray[3].id)
+    }
+    else{
+        gameWords.slice(8,17).forEach( word => word.team_id = teamArray[3].id)
+        gameWords.slice(17,25).forEach( word => word.team_id = teamArray[2].id)
+    }
 
     gameWords = wordShuffler(gameWords);
     for(let i = 0; i<gameWords.length; i++){
@@ -254,7 +263,8 @@ function fetchWordArray(){
         .then(response => response.json())
         .then(wordArray => {
             populateCards(wordArray);
-        currentTurn()})
+        // currentTurn()
+    })
     
 }
 
