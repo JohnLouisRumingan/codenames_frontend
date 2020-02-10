@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", (e)=> {
         }
     });
     fetchTeams();
-    
+    getPassTurnButton().addEventListener('click', switchTurn)
     
     
 });
@@ -37,12 +37,19 @@ function currentTurn(){
         let coinflip = Math.floor(Math.random() * 2) + 1
         if (coinflip === 1){ 
             div.dataset.id = teamArray[2].id
+            
+            setCurrentTurnText()
+            
         }
         else{ 
+            
             div.dataset.id = teamArray[3].id
+            setCurrentTurnText()
         }
         
     }
+
+    return div.dataset.id 
 }
 function makeMasterKeyCard(gameWords){
 
@@ -144,6 +151,11 @@ function wordHandler(event){
     }
 }
 
+function switchTurn(e){ 
+  let turnSwitcher = true 
+  setCurrentTurnText(turnSwitcher)
+}
+
 
 // element fetchers and url fetchers 
 
@@ -161,6 +173,10 @@ function getWordContainer(){
 function getCurrentTurn(){ 
     return document.getElementById("current-turn")
     
+}
+
+function getPassTurnButton(){ 
+    return document.getElementById("pass-turn-button")
 }
 
 function fetchWordArray(){
@@ -184,3 +200,29 @@ function fetchTeams(){
         })
         
 }
+// helpers 
+function setCurrentTurnText(switchTurn){ 
+
+    let  div = getCurrentTurn()
+if (!switchTurn){ 
+    if (div.dataset.id === `${teamArray[2].id}`){ 
+        div.innerText = `Its ${teamArray[2].name}'s turn`
+    }
+    else if (div.dataset.id = `${teamArray[3].id}` ){ 
+        
+        div.innerText = `Its ${teamArray[3].name}'s turn`
+    }
+} 
+    else if(switchTurn){ 
+        if (div.dataset.id === `${teamArray[2].id}`){ 
+            div.dataset.id = `${teamArray[3].id}`
+            div.innerText = `Its ${teamArray[3].name}'s turn`
+        }
+        else if (div.dataset.id = `${teamArray[3].id}` ){ 
+            div.dataset.id = `${teamArray[2].id}`
+            div.innerText = `Its ${teamArray[2].name}'s turn`
+        }
+
+    }
+}
+
