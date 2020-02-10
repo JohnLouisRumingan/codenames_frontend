@@ -17,18 +17,40 @@
         <p>
             Team Leader: <button id="master-key-button">See the clue card</button>
         </p>
+        <form id='clue-form'>
+            Clue Form
+            <input
+            type = "text" 
+            name = "clue"
+            placeholder="Enter a clue"
+            value = ""
+            >
+
+            <input 
+            type = "number"
+            name = "guesses"
+            value = "1"
+            >
+            <!-- <input 
+            type = "hidden"
+            name = "current-team"
+            > -->
+            <input 
+            type = "submit"
+            value = "Submit Clue"
+            >
+
+        </form>
         <!-- <div id='turn-indicator'>Turn indicator goes here</div> -->
         <div id="red-team-container">Red team</div>
-        <div id='red-team-clue-container'>Red team clue form
-            <form id='red-clue-form'>
-                Red clue form goes here
-            </form>
+        <div id='red-team-clue-container'> Red Team Clue Container
+            <ul id = "red-team-ul"></ul>
         </div>
         <div id="blue-team-container">Blue team</div>
-        <div id='blue-team-clue-container'>Blue team clue form 
-            <form id='blue-clue-form'>
-                Blue clue form goes here
-            </form>
+        <div id='blue-team-clue-container'>Blue Team CLue Container
+            <ul id = "blue-team-ul"></ul>
+
+    
         </div>
         <div id="current-turn" data-id =""> Current Turn</div>
         <button id="pass-turn-button">  Pass the Turn </button>

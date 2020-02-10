@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", (e)=> {
     });
     fetchTeams();
     getPassTurnButton().addEventListener('click', switchTurn)
-    
+    getClueForm().addEventListener('submit', (e) => clueFormHandler(e,currentTurn() ))
     
 });
 
@@ -156,6 +156,24 @@ function switchTurn(e){
   setCurrentTurnText(turnSwitcher)
 }
 
+function clueFormHandler(e, currentTeam){ 
+    e.preventDefault()
+    let clue = e.target.clue.value 
+    let guesses = e.target.guesses.value 
+    let clueEntry = document.createElement('li')
+    
+    clueEntry.innerText = `${clue} ${guesses}`
+    if (currentTeam === `${teamArray[2].id}`){ 
+       let ul = document.getElementById('red-team-ul')
+       ul.appendChild(clueEntry)
+    }
+    else{ 
+        let ul = document.getElementById('blue-team-ul')
+        ul.appendChild(clueEntry)
+    }
+e.target.reset()
+}
+
 
 // element fetchers and url fetchers 
 
@@ -178,6 +196,12 @@ function getCurrentTurn(){
 function getPassTurnButton(){ 
     return document.getElementById("pass-turn-button")
 }
+ 
+function getClueForm(){ 
+    return document.querySelector('#clue-form')
+}
+
+// Api fecthes and renders
 
 function fetchWordArray(){
     
