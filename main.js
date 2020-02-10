@@ -1,6 +1,6 @@
-let masterKeyShowing = false;
+let masterKeyShowing = false 
 let teamArray;
-
+let guessLimit 
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#2D1F92'
 const teamColorAssasin = '#403251'
@@ -133,22 +133,34 @@ function wordShuffler(array) {
 
 // event handlers
 function wordHandler(event){
-
-    let teamNumber = event.target.dataset['team'];
-    console.log(`This card belongs to ${teamNumber}`)
+    
+     let teamNumber = event.target.dataset['team'];
+     console.log(`This card belongs to ${teamNumber}`)
+   if (guessLimit === 0){ 
+       alert("Youve run out of clues")
+       switchTurn()
+   } 
+   else {
     
     if(teamNumber=== `${teamArray[0].id}`){
         event.target.style.backgroundColor = teamColorAssasin
+       alert("You hit the assasin")
+       guessLimit = 0
+       
     }
     else if(teamNumber===`${teamArray[1].id}`){
         event.target.style.backgroundColor = 'beige'
+        guessLimit--
     }
     else if(teamNumber===`${teamArray[2].id}`){
         event.target.style.backgroundColor = teamColorRed
+        guessLimit--
     }
     else if(teamNumber===`${teamArray[3].id}`){
         event.target.style.backgroundColor = teamColorBlue
+        guessLimit--
     }
+}
 }
 
 function switchTurn(e){ 
@@ -158,10 +170,13 @@ function switchTurn(e){
 
 function clueFormHandler(e, currentTeam){ 
     e.preventDefault()
+    document.querySelector('#master-key-card').style.display = 'none'
+    masterKeyShowing = false 
+
     let clue = e.target.clue.value 
     let guesses = e.target.guesses.value 
     let clueEntry = document.createElement('li')
-    
+      guessLimit = guesses
     clueEntry.innerText = `${clue} ${guesses}`
     if (currentTeam === `${teamArray[2].id}`){ 
        let ul = document.getElementById('red-team-ul')
@@ -171,6 +186,7 @@ function clueFormHandler(e, currentTeam){
         let ul = document.getElementById('blue-team-ul')
         ul.appendChild(clueEntry)
     }
+    
 e.target.reset()
 }
 
