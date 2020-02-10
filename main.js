@@ -1,6 +1,10 @@
 let masterKeyShowing = false;
 let teamArray;
 
+const teamColorRed = '#AA2D19'
+const teamColorBlue = '#2D1F92'
+const teamColorAssasin = '#403251'
+
 document.addEventListener("DOMContentLoaded", (e)=> {
 
     console.log('connected to main.js')
@@ -13,17 +17,33 @@ document.addEventListener("DOMContentLoaded", (e)=> {
         //shows and hides the clue card
         masterKeyShowing = !masterKeyShowing;
         if (masterKeyShowing){
-                masterKeyCard.style.display = 'block'
+            masterKeyCard.style.display = 'block'
         }
         else{
-                masterKeyCard.style.display = 'none'
+            masterKeyCard.style.display = 'none'
         }
     });
     fetchTeams();
-    fetchWordArray();
+    
+    
     
 });
 
+function currentTurn(){ 
+    
+    
+    let div =  getCurrentTurn() 
+    if (div.dataset.id === ""){ 
+        let coinflip = Math.floor(Math.random() * 2) + 1
+        if (coinflip === 1){ 
+            div.dataset.id = teamArray[2].id
+        }
+        else{ 
+            div.dataset.id = teamArray[3].id
+        }
+        
+    }
+}
 function makeMasterKeyCard(gameWords){
 
     gameWords.forEach(word => renderKeyCards(word))
@@ -37,16 +57,16 @@ function renderKeyCards(word){
     newClue.dataset.team = word.team_id;
 
     if(newClue.dataset.team ===`${teamArray[0].id}`){
-        newClue.style.backgroundColor = 'grey';
+        newClue.style.backgroundColor = teamColorAssasin
     }
     else if(newClue.dataset.team === `${teamArray[1].id}`){
         newClue.style.backgroundColor = 'beige';
     }
     else if(newClue.dataset.team === `${teamArray[2].id}`){
-        newClue.style.backgroundColor = 'red';
+        newClue.style.backgroundColor = teamColorRed
     }
     else if(newClue.dataset.team === `${teamArray[3].id}`){
-        newClue.style.backgroundColor = 'blue';
+        newClue.style.backgroundColor = teamColorBlue
     }
     
     masterKey.appendChild(newClue);
@@ -84,6 +104,7 @@ function renderCard(word, index){
 }
 
 
+
 function wordShuffler(array) {
     let newArray = array;
     let i = newArray.length,
@@ -110,16 +131,16 @@ function wordHandler(event){
     console.log(`This card belongs to ${teamNumber}`)
     
     if(teamNumber=== `${teamArray[0].id}`){
-        event.target.style.backgroundColor = 'grey'
+        event.target.style.backgroundColor = teamColorAssasin
     }
     else if(teamNumber===`${teamArray[1].id}`){
         event.target.style.backgroundColor = 'beige'
     }
     else if(teamNumber===`${teamArray[2].id}`){
-        event.target.style.backgroundColor = 'red'
+        event.target.style.backgroundColor = teamColorRed
     }
     else if(teamNumber===`${teamArray[3].id}`){
-        event.target.style.backgroundColor = 'blue'
+        event.target.style.backgroundColor = teamColorBlue
     }
 }
 
@@ -137,15 +158,29 @@ function teamURL(){
 function getWordContainer(){
     return document.getElementById('word-card-container');
 }
+function getCurrentTurn(){ 
+    return document.getElementById("current-turn")
+    
+}
 
 function fetchWordArray(){
+    
+    
+        console.log("Fetching words")
     fetch(wordURL())
         .then(response => response.json())
-        .then(wordArray => populateCards(wordArray))
+        .then(wordArray => {
+            populateCards(wordArray)
+        currentTurn()})
+    
 }
 
 function fetchTeams(){
     fetch(teamURL())
         .then(response => response.json())
-        .then(teams => teamArray = teams)
+        .then(teams => { 
+            teamArray = teams
+            fetchWordArray()
+        })
+        
 }
