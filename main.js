@@ -6,7 +6,7 @@ let bluePoints;
 let redPoints;
 
 const teamColorRed = '#AA2D19'
-const teamColorBlue = '#2D1F92'
+const teamColorBlue = '#99b3ff'
 const teamColorAssasin = '#403251'
 const teamColorNeutral = 'beige';
 
@@ -74,6 +74,7 @@ function renderKeyCards(word){
     let newClue = document.createElement('div');
     newClue.innerText = word.name;
     newClue.dataset.team = word.team_id;
+    newClue.className = "master-card"
 
     if(newClue.dataset.team ===`${teamArray[0].id}`){
         newClue.style.backgroundColor = teamColorAssasin
