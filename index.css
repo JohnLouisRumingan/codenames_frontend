@@ -1,15 +1,12 @@
 button {
     position: relative;
-    background-color: #e04b52;
-    border: none;
-    border-radius: 5px;
-    height: 3rem;
+   
+    height: 2.5rem;
     width: max-content;
-    color: whitesmoke;
     font-size: 18px;
-    justify-self: center;
   }
 
+  
   .word-card {
     text-align: center;
     border: grey solid 1px;
@@ -41,3 +38,5 @@ button {
     background-image: url("https://kid101.com/wp-content/uploads/2017/10/Spy-Training.jpg");
     background-size: 12rem;
   }
+
+ 

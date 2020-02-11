@@ -223,7 +223,7 @@ function switchTurn(e){
 function clueFormHandler(e, currentTeam){ 
     e.preventDefault()
     let clue = e.target.clue.value 
-
+    
     if(wordList.includes(clue.toLowerCase())){
         alert("You cannot enter a word on the word list! It is now the other team's turn.");
         switchTurn();

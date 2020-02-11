@@ -10,40 +10,51 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="index.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+
     </head>
     <body>
         <h1 id="codenames-header">Codenames</h1>
-        <button id='reset-game'>Reset game</button>
+        <button id='reset-game' class ="ui green button">Reset game</button>
         <div id='master-key-card'>Clue card goes here </div>
         <p>
             Team Leader: <br>
-            <button id="master-key-button">See the clue card</button>
+            <button id="master-key-button" class = "ui brown button">See the clue card</button>
+            
         </p>
-        <form id='clue-form'>
-            Clue Form
+        <div class= "ui text container">
+        <div class= "ui form">
+        <form id='clue-form' class="required field">
+            
+        <label>Clue Form</label> 
             <input
             type = "text" 
             name = "clue"
             placeholder="Enter a clue"
             value = ""
             >
-
-            <input 
+       
+             
+          <label>Guesses</label>
+           <input 
             type = "number"
             name = "guesses"
             value = "1"
             >
-            <!-- <input 
-            type = "hidden"
-            name = "current-team"
-            > -->
+            
+           
             <input 
             type = "submit"
             value = "Submit Clue"
             >
-
         </form>
-        <!-- <div id='turn-indicator'>Turn indicator goes here</div> -->
+
+        
+    </div>
+</div>
+      
         <div id="red-team-container">Red team</div>
         <div id='red-team-clue-container'> Red Team Clue Container
             <ul id = "red-team-ul"></ul>
@@ -55,7 +66,7 @@
     
         </div>
         <div id="current-turn" data-id =""> Current Turn</div>
-        <button id="pass-turn-button">  Pass the Turn </button>
+        <button id="pass-turn-button" class ="ui black button">  Pass the Turn </button>
         <div id="word-card-container"></div>
         <script src="" async defer></script>
         <script src="main.js"></script>
