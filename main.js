@@ -4,6 +4,7 @@ let guessLimit
 let wordList = [];
 let bluePoints;
 let redPoints;
+let clueWindow = undefined;
 
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#99b3ff'
@@ -25,10 +26,18 @@ document.addEventListener("DOMContentLoaded", (e)=> {
         //shows and hides the clue card
         masterKeyShowing = !masterKeyShowing;
         if (masterKeyShowing){
-            masterKeyCard.style.display = 'block'
+            // masterKeyCard.style.display = 'block'
+
+            //shows new clue window
+            if(!clueWindow){
+            clueWindow = window.open('clues.html', '_blank');
+            }
         }
         else{
             masterKeyCard.style.display = 'none'
+
+            //closes clue window
+            // clueWindow.close();
         }
     });
     fetchTeams();
@@ -115,8 +124,9 @@ function populateCards(wordArray){
         gameWords.slice(17,25).forEach( word => word.team_id = teamArray[2].id)
     }
       
+        //saves game words array to current_games table
       for(let i =1; i<= 25; i++){ 
-          postClue(gameWords[i], i)
+          postClue(gameWords[i-1], i)
       }
       
     gameWords = wordShuffler(gameWords);
@@ -274,6 +284,7 @@ function resetGameHandler(event){
     wordList = [];
     bluePoints = 0;
     redPoints = 0;
+    clueWindow.close();
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
