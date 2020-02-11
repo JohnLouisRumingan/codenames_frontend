@@ -39,4 +39,20 @@ button {
     background-size: 12rem;
   }
 
+
+  .master-card {
+    text-align: center;
+    border: grey solid 1px;
+    padding: 1rem;
+    width: 4rem;
+    height: 3rem;
+    display: inline-grid;
+    margin: 1rem 2rem;
+    box-shadow: 3px 4px #99a595;
+    font-size: 2vi;
+    font-weight: 900;
+    justify-self: center;
+    line-height: 2rem;
+    background-size: 12rem;
+  }
  
