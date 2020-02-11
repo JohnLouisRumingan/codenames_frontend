@@ -50,15 +50,15 @@ button {
     text-align: center;
     border: grey solid 1px;
     padding: 1rem;
-    width: 4rem;
-    height: 3rem;
+    width: 8rem;
+    height: 4rem;
     display: inline-grid;
-    margin: 1rem 2rem;
+    margin: 0.5rem 1rem;
     box-shadow: 3px 4px #99a595;
     font-size: 2vi;
     font-weight: 900;
     justify-self: center;
-    line-height: 2rem;
+    line-height: 1rem;
     background-size: 12rem;
   }
  
