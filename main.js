@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", (e)=> {
 
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
-
+    
+    
     masterKeyCard.style.display = "none";
 
     masterKeyBtn.addEventListener('click', (e) => {
@@ -217,14 +218,20 @@ function wordHandler(event){
 }
 
 function switchTurn(e){ 
+    
   let turnSwitcher = true 
   setCurrentTurnText(turnSwitcher)
 }
 
 function clueFormHandler(e, currentTeam){ 
+    
+    
     e.preventDefault()
     let clue = e.target.clue.value 
-    
+    if(clue === ""){ 
+        alert("Please enter a clue")
+    }
+    else{
     if(wordList.includes(clue.toLowerCase())){
         alert("You cannot enter a word on the word list! It is now the other team's turn.");
         switchTurn();
@@ -246,13 +253,17 @@ function clueFormHandler(e, currentTeam){
         let ul = document.getElementById('blue-team-ul')
         ul.appendChild(clueEntry)
     }
+    debugger
+    clueFormStyle()
     }
+
+}
     
 e.target.reset()
 }
 
 function resetGameHandler(event){
-
+ 
     alert('Resetting game...')
     teamArray = null;
     guessLimit = null;
@@ -263,9 +274,14 @@ function resetGameHandler(event){
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
     deleteChildElements(document.getElementById('blue-team-ul'));
+    deleteChildElements(document.getElementById('blue-team-container'));
+    deleteChildElements(document.getElementById('red-team-container'));
+
     deleteChildElements(document.getElementById('master-key-card'));
     document.querySelector('#current-turn').dataset.id = ""
     fetchTeams();
+    clueFormStyle()
+    
     // setCurrentTurnText();
     document.querySelector('#master-key-card').style.display = "none";
 }
@@ -335,6 +351,7 @@ function fetchTeams(){
 }
 // helpers 
 function setCurrentTurnText(switchTurn){ 
+    
     let  div = getCurrentTurn()
     guessLimit = 0;
         if (!switchTurn){ 
@@ -355,7 +372,7 @@ function setCurrentTurnText(switchTurn){
                 div.dataset.id = `${teamArray[2].id}`
                 div.innerText = `It's ${teamArray[2].name}'s turn`
             }
-
+            appearClueForm()
         }
 }
 
@@ -367,7 +384,7 @@ function deleteChildElements(parentNode){
 
 function countRedCards(){
     let redCards = getRedContainer().childElementCount
-    debugger;
+    
     if (redCards === redPoints){
         alert("Red Team has won!")
     }
@@ -377,5 +394,25 @@ function countBlueCards(){
     let blueCards = getBlueContainer().childElementCount
     if (blueCards === bluePoints){
         alert("Blue Team has won!")
+    }
+}
+
+// function removeClueForm(){ 
+//     form = getClueForm()
+//     form.style.display = 'none'
+// }
+
+function appearClueForm(){ 
+    form = getClueForm()
+    form.style.display = ""
+}
+
+function clueFormStyle(){ 
+    form = getClueForm()
+    if (form.style.display === ""){ 
+        form.style.display = 'none'
+    }
+    else if(form.style.display === 'none'){ 
+        form.style.display = ""
     }
 }
