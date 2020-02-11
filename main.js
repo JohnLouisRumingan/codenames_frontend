@@ -114,7 +114,11 @@ function populateCards(wordArray){
         gameWords.slice(8,17).forEach( word => word.team_id = teamArray[3].id)
         gameWords.slice(17,25).forEach( word => word.team_id = teamArray[2].id)
     }
-
+      
+      for(let i =1; i<= 25; i++){ 
+          postClue(gameWords[i], i)
+      }
+      
     gameWords = wordShuffler(gameWords);
     for(let i = 0; i<gameWords.length; i++){
         renderCard(gameWords[i], i)
@@ -253,7 +257,7 @@ function clueFormHandler(e, currentTeam){
         let ul = document.getElementById('blue-team-ul')
         ul.appendChild(clueEntry)
     }
-    debugger
+    
     clueFormStyle()
     }
 
@@ -397,10 +401,19 @@ function countBlueCards(){
     }
 }
 
-// function removeClueForm(){ 
-//     form = getClueForm()
-//     form.style.display = 'none'
-// }
+function postClue(word, i ) { 
+    let newWord = word.name
+    let newWordTeam = word.team_id
+    let newObj = {name: newWord, team_id: newWordTeam}
+    fetch(`http://localhost:3000/current_games/${i}`, { 
+        method: "PATCH", 
+        headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }, 
+        body: JSON.stringify(newObj)
+    })
+}
 
 function appearClueForm(){ 
     form = getClueForm()
