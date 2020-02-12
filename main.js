@@ -15,9 +15,8 @@ const teamColorAssasin = '#403251'
 const teamColorNeutral = 'beige';
 
 document.addEventListener("DOMContentLoaded", (e)=> {
-
     console.log('connected to main.js')
-
+    
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
     const rulesButton = document.querySelector('#rules-button');
@@ -25,15 +24,19 @@ document.addEventListener("DOMContentLoaded", (e)=> {
     
     masterKeyCard.style.display = "none";
     rulesCard.style.display = "block";
-
+    
     masterKeyBtn.addEventListener('click', (e) => masterKeyHandler(e, masterKeyCard));
     rulesButton.addEventListener('click', (e)=> rulesHandler(e, rulesCard));
-
+    
+    redModal()
+    blueModal()
+    neutralModal()
     makeRules();
     fetchTeams();
     getPassTurnButton().addEventListener('click', switchTurn)
     getClueForm().addEventListener('submit', (e) => clueFormHandler(e,currentTurn() ))
     getResetButton().addEventListener('click', (e) => resetGameHandler(e))
+
 });
 
 function currentTurn(){ 
@@ -244,6 +247,7 @@ function wordHandler(event){
             }
             else if(teamNumber===`${teamArray[1].id}`){
                 event.target.style.backgroundColor = 'beige'
+                document.getElementById('neutral-modal-container').appendChild(chosenWordCard)
                 guessLimit = 0;
                 alert("You've hit a neutral target. Your turn is now ended.")
                 wordHandler(event);
@@ -252,9 +256,10 @@ function wordHandler(event){
                 event.target.style.backgroundColor = teamColorRed
                 guessLimit--
                 
-                debugger
+                
                 chosenWordCard.className = "tiny-card";
-                getRedContainer().append(chosenWordCard);
+                getRedModal().appendChild(chosenWordCard)
+                // getRedContainer().append(chosenWordCard);
                 
                 if(currentTurn()===`${teamArray[3].id}`){
                     guessLimit = 0;
@@ -266,10 +271,12 @@ function wordHandler(event){
                 event.target.style.backgroundColor = teamColorBlue
                 guessLimit--
 
-                debugger
+                
 
                 chosenWordCard.className = "tiny-card";
-                getBlueContainer().append(chosenWordCard);
+                // getBlueContainer().append(chosenWordCard);
+                getBlueModal().appendChild(chosenWordCard)
+
 
                 if(currentTurn()===`${teamArray[2].id}`){
                     guessLimit = 0;
@@ -278,7 +285,9 @@ function wordHandler(event){
                 }
             }
         }
+        if(guessLimit !== 0){
         alert(`You have ${guessLimit} guesses left.`)
+        }
     }
     else{
         alert(`You must enter a clue before you can guess a word.`)
@@ -514,4 +523,58 @@ function animateCard(event){
    setTimeout( () =>event.target.classList.add('tiny-card'),1000)
 }
 
+function redModal(){ 
+    let div = document.getElementById('red-team-container')
+    div.addEventListener('click', showRedModal)
+}
 
+function showRedModal(){ 
+    
+   let test = document.getElementById('red-modal')
+   test.style.display ="block"
+   test.addEventListener('click', (e) => { 
+       if(test.style.display ==="block"){
+           test.style.display=""
+       }
+   })  
+}
+
+function getRedModal(){ 
+    return document.getElementById('red-modal-container')
+}
+
+function blueModal(){ 
+    let div = document.getElementById('blue-team-container')
+    div.addEventListener('click', showBlueModal)
+}
+
+function getBlueModal(){ 
+    return document.getElementById('blue-modal-container')
+
+}
+
+function showBlueModal(){ 
+    
+    let test = document.getElementById('blue-modal')
+    test.style.display ="block"
+    test.addEventListener('click', (e) => { 
+        if(test.style.display ==="block"){
+            test.style.display=""
+        }
+    })  
+ }
+
+ function neutralModal(){ 
+    let div = document.getElementById('neutral-team-container')
+    div.addEventListener('click', showNeutralModal)
+}
+
+function showNeutralModal(){ 
+    let test = document.getElementById('neutral-modal')
+    test.style.display ="block"
+    test.addEventListener('click', (e) => { 
+        if(test.style.display ==="block"){
+            test.style.display=""
+        }
+    })  
+}

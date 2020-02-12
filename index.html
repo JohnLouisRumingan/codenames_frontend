@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 
 
+
     </head>
     <body>
         <h1 id="codenames-header">Codenames</h1>
@@ -59,26 +60,53 @@
       
         
         
-        <div class="ui two column centered grid">
+        <div class="ui three column centered grid">
             
-        <div class="two wide column">
-            <div id="blue-team-container">Blue Team</div>
-              <div id='blue-team-clue-container'>Blue Team Clue Container
-                   <ul id = "blue-team-ul"></ul>
-              </div>
+        <div class="three wide column">
+            <div id="blue-team-container"><button class= "ui blue button">Blue Team Words </button></div>
         </div>
-            <div class="two wide column">
-                <div id="red-team-container">Red team</div>
-                <div id='red-team-clue-container'> Red Team Clue Container
-                    <ul id = "red-team-ul"></ul>
-                </div>
-            </div>
+        
+        <div class="three wide column">
+                <div id="neutral-team-container"> <button class= "ui button">Neutral Words </button> </div>
+                
+        </div>
            
+        <div class="three wide column">
+                <div id="red-team-container"><button class= "ui red button">Red Team Words </button></div>
+        </div>
+
             
-          </div>
+        </div>
+
+          <!-- <div id="neutral-team-container">  </div> -->
         <div id="current-turn" data-id =""> Current Turn</div>
         <button id="pass-turn-button" class ="ui black button">  Pass the Turn </button>
+        <div class="ui modal" id="red-modal">
+           <div class="header">
+             <h4>Red Team Container</h4> 
+            </div>
+            <div id="red-modal-container"></div>
+            <ul id = "red-team-ul">Previous Clues</ul>
+        </div>
+        <div class="ui modal" id ="blue-modal">
+            <div class="header">
+              <h4>Blue Team Container</h4> 
+             </div>
+             <div id="blue-modal-container"></div>
+             <ul id = "blue-team-ul">Previous Clues</ul>
+         </div>
+         <div class="ui modal" id ="neutral-modal">
+            <div class="header">
+              <h4>Neutral Team Words</h4> 
+             </div>
+             <div id="neutral-modal-container"></div>
+           
+         </div>
+
+
+            
         <div id="word-card-container"></div>
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
         <script src="" async defer></script>
         <script src="main.js"></script>
     </body>
