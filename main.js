@@ -300,15 +300,21 @@ function wordHandler(event){
 }
 
 function switchTurn(e){ 
-  if(firstGuess){  
-  let turnSwitcher = true 
-  setCurrentTurnText(turnSwitcher)
-  firstGuess = false;
-  clueBeforeGuess = false;
-  }
-  else if(!firstGuess){
-      alert('You must guess at least once')
-  }
+
+    if(gameContinue){
+        if(firstGuess){  
+        let turnSwitcher = true 
+        setCurrentTurnText(turnSwitcher)
+        firstGuess = false;
+        clueBeforeGuess = false;
+        }
+        else if(!firstGuess){
+            alert('You must guess at least once')
+        }
+    }
+    else if(!gameContinue){
+        alert('The game is over.')
+    }
 }
 
 function clueFormHandler(e, currentTeam){ 
