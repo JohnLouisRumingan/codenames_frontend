@@ -179,6 +179,7 @@ function makeRules(){
     <p>
     Game Play<br>
     • Spymaster gives 1 word + 1 number clue (e.g.: tree 2) and can give no other clues of any kind.<br>
+    • Spymaster can give a 0 number clue (e.g.: animal 0) and the team gets infinite guesses.<br>
     • If Spymaster says a clue that is a word on the list, the team forfeits their turn.<br>
     • Team debates then touches a card. If it belongs to their team, the spymaster places that card in their team container<br>
     and they can guess again, up to the # of clues + 1. Must always make at least 1 guess.<br>
@@ -268,7 +269,7 @@ function wordHandler(event){
                     }
                 }
                 else if(teamNumber===`${teamArray[3].id}`){
-                    event.target.style.backgroundColor = teamColorBlue
+                    // event.target.style.backgroundColor = teamColorBlue
                     guessLimit--
 
                         
