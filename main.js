@@ -1,10 +1,13 @@
 let masterKeyShowing = false 
+let rulesShowing = true;
 let teamArray;
 let guessLimit
 let wordList = [];
-let bluePoints;
-let redPoints;
+let bluePoints; // number of guesses team must have to win. 9 if first team, 8 if second
+let redPoints;  
 let clueWindow = undefined;
+let firstGuess = false; // you cannot pass the turn without guessing at least one card - working
+let clueBeforeGuess = false;  // you cannot guess before a clue is given
 
 const teamColorRed = '#AA2D19'
 const teamColorBlue = '#99b3ff'
@@ -17,29 +20,16 @@ document.addEventListener("DOMContentLoaded", (e)=> {
 
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
-    
+    const rulesButton = document.querySelector('#rules-button');
+    const rulesCard = document.querySelector('#rules-card');
     
     masterKeyCard.style.display = "none";
+    rulesCard.style.display = "block";
 
-    masterKeyBtn.addEventListener('click', (e) => {
+    masterKeyBtn.addEventListener('click', (e) => masterKeyHandler(e, masterKeyCard));
+    rulesButton.addEventListener('click', (e)=> rulesHandler(e, rulesCard));
 
-        //shows and hides the clue card
-        masterKeyShowing = !masterKeyShowing;
-        if (masterKeyShowing){
-            // masterKeyCard.style.display = 'block'
-
-            //shows new clue window
-            if(!clueWindow){
-            clueWindow = window.open('clues.html', '_blank');
-            }
-        }
-        else{
-            masterKeyCard.style.display = 'none'
-
-            //closes clue window
-            // clueWindow.close();
-        }
-    });
+    makeRules();
     fetchTeams();
     getPassTurnButton().addEventListener('click', switchTurn)
     getClueForm().addEventListener('submit', (e) => clueFormHandler(e,currentTurn() ))
@@ -151,10 +141,7 @@ function renderCard(word, index){
     newCardDiv.className = "word-card";
     newCardDiv.addEventListener('click', (e) => wordHandler(e))
     wordContainer.append(newCardDiv);
-    newCardDiv.addEventListener('click', animateCard)
 }
-
-
 
 function wordShuffler(array) {
     let newArray = array;
@@ -175,84 +162,142 @@ function wordShuffler(array) {
     return newArray;
 }
 
+function makeRules(){
+    let rulesDiv = document.querySelector('#rules-card');
+    let rulesString = `
+    <p>
+    Game Setup<br>
+    Make 2 teams, Red and Blue, and choose a Spymaster for each team. Teams don’t have to be even.<br>
+    • Spymasters and teammates sit on opposite sides of table. Spymasters manage Agent cards for team.<br>
+    • Game will randomly choose 25 codenames cards. These will be assigned to red team, blue team, assassin, and neutral.<br>
+    • The first team must get 9 codenames correct (vs 8 for 2nd team)<br>
+    </p>
+    <p>
+    Game Play<br>
+    • Spymaster gives 1 word + 1 number clue (ex: tree; 2) and can give no other clues of any kind.<br>
+    • Team debates then touches a card. If it belongs to their team, the spymaster covers with team color<br>
+    and they can guess again, up to the # of clues + 1. Must always make at least 1 guess.<br>
+    • If Innocent Bystander or other team color, cover with respective card, turn is over<br>
+    • If Assassin, game is over, team loses<br>
+    • If Spymaster gives invalid clue, turn is over. No clues other than word and #. Timer is optional.</p>`;
+    rulesDiv.innerHTML = rulesString;
+}
+
 // event handlers
+
+function rulesHandler(event, rulesCard){
+
+    console.log('You clicked on the rules')
+    rulesShowing = !rulesShowing;
+
+    if(rulesShowing){
+        rulesCard.style.display = 'block';
+    }
+    else{
+        rulesCard.style.display = 'none';
+    }
+}
+
+function masterKeyHandler(event, masterKeyCard){
+        //shows and hides the clue card
+        masterKeyShowing = !masterKeyShowing;
+        if (masterKeyShowing){
+            // line below shows the keycard to the same page. Use this with the if statement so new windows don't show up every time.
+            // masterKeyCard.style.display = 'block'
+
+            //shows new clue window
+            //If not used with the above, comment out the if statement so you can open up new windows if accidentally closed.
+            // if(!clueWindow){
+            clueWindow = window.open('clues.html', '_blank');
+            // }
+        }
+        else{
+            masterKeyCard.style.display = 'none'
+
+            //closes clue window
+            // clueWindow.close();
+        }
+}
+
 function wordHandler(event){
+
+    if(clueBeforeGuess){
     
-     let teamNumber = event.target.dataset['team'];
-     console.log(`This card belongs to ${teamNumber}`)
+        firstGuess = true;
+        let teamNumber = event.target.dataset['team'];
+        console.log(`This card belongs to ${teamNumber}`)
 
-     let chosenWordCard = event.target;
-     
-     
-
-   if (guessLimit === 0){ 
-       alert("You've run out of clues")
-       switchTurn()
-   } 
-   else {
+        let chosenWordCard = event.target;
+        if (guessLimit === 0){ 
+            alert("You've run out of clues")
+            switchTurn()
+        } 
+        else {
+            
+            
     
-    if(teamNumber=== `${teamArray[0].id}`){
-        event.target.style.backgroundColor = teamColorAssasin
-       alert("You hit the assasin. Game over.")
-       guessLimit = 0
-       
-    }
-    else if(teamNumber===`${teamArray[1].id}`){
-        event.target.style.backgroundColor = 'beige'
-        guessLimit = 0;
-        alert("You've hit a neutral target. Your turn is now ended.")
-        wordHandler(event);
-    }
-    else if(teamNumber===`${teamArray[2].id}`){
-        event.target.style.backgroundColor = teamColorRed
-        guessLimit--
-        
-
-        
-
-        // chosenWordCard.classList.add('tiny-card');
-        getRedContainer().append(chosenWordCard);
-        
-        if(currentTurn()===`${teamArray[3].id}`){
-            guessLimit = 0;
+            if(teamNumber=== `${teamArray[0].id}`){
+                event.target.style.backgroundColor = teamColorAssasin
+            alert("You hit the assasin. Game over.")
+            guessLimit = 0
             
-        
-            alert("You've chosen an opponent team's card! Your turn is now ended.")
-            setTimeOut(() =>wordHandler(event),200);
+            }
+            else if(teamNumber===`${teamArray[1].id}`){
+                event.target.style.backgroundColor = 'beige'
+                guessLimit = 0;
+                alert("You've hit a neutral target. Your turn is now ended.")
+                wordHandler(event);
+            }
+            else if(teamNumber===`${teamArray[2].id}`){
+                event.target.style.backgroundColor = teamColorRed
+                guessLimit--
+                
+                debugger
+                chosenWordCard.className = "tiny-card";
+                getRedContainer().append(chosenWordCard);
+                
+                if(currentTurn()===`${teamArray[3].id}`){
+                    guessLimit = 0;
+                    alert("You've chosen an opponent team's card! Your turn is now ended.")
+                    wordHandler(event);
+                }
+            }
+            else if(teamNumber===`${teamArray[3].id}`){
+                event.target.style.backgroundColor = teamColorBlue
+                guessLimit--
+
+                debugger
+
+                chosenWordCard.className = "tiny-card";
+                getBlueContainer().append(chosenWordCard);
+
+                if(currentTurn()===`${teamArray[2].id}`){
+                    guessLimit = 0;
+                    alert("You've chosen an opponent team's card! Your turn is now ended.")
+                    wordHandler(event);
+                }
+            }
         }
+        alert(`You have ${guessLimit} guesses left.`)
     }
-    else if(teamNumber===`${teamArray[3].id}`){
-        event.target.style.backgroundColor = teamColorBlue
-        guessLimit--
-
-        
-      
-
-            //    chosenWordCard.classList.add('tiny-card');
-
-        
-        getBlueContainer().append(chosenWordCard);
-
-        if(currentTurn()===`${teamArray[2].id}`){
-            guessLimit = 0;
-            alert("You've chosen an opponent team's card! Your turn is now ended.")
-            
-            setTimeOut(() =>wordHandler(event),200);
-
-             
-            
-        }
+    else{
+        alert(`You must enter a clue before you can guess a word.`)
     }
-    alert(`You have ${guessLimit} guesses left.`)
     countRedCards();
     countBlueCards();
-}
+
 }
 
 function switchTurn(e){ 
-    
+  if(firstGuess){  
   let turnSwitcher = true 
   setCurrentTurnText(turnSwitcher)
+  firstGuess = false;
+  clueBeforeGuess = false;
+  }
+  else if(!firstGuess){
+      alert('You must guess at least once')
+  }
 }
 
 function clueFormHandler(e, currentTeam){ 
@@ -264,35 +309,37 @@ function clueFormHandler(e, currentTeam){
         alert("Please enter a clue")
     }
     else{
-    if(wordList.includes(clue.toLowerCase())){
-        alert("You cannot enter a word on the word list! It is now the other team's turn.");
-        switchTurn();
-    }
-    else{
-    document.querySelector('#master-key-card').style.display = 'none'
-    masterKeyShowing = false 
 
-    let guesses = parseInt(e.target.guesses.value);
-    let clueEntry = document.createElement('li')
-    clueEntry.classList += "restored-item"
-    guessLimit = guesses + 1 ;
-    clueEntry.innerText = `${clue} ${guesses}`
-    alert(`You have ${guessLimit} guesses remaining.`)
-    if (currentTeam === `${teamArray[2].id}`){ 
-       let ul = document.getElementById('red-team-ul')
-       ul.appendChild(clueEntry)
-    }
-    else{ 
-        let ul = document.getElementById('blue-team-ul')
-        ul.appendChild(clueEntry)
+    clueBeforeGuess = true; 
+
+        if(wordList.includes(clue.toLowerCase())){
+            alert("You cannot enter a word on the word list! It is now the other team's turn.");
+            switchTurn();
+        }
+        else{
+        document.querySelector('#master-key-card').style.display = 'none'
+        masterKeyShowing = false 
+
+        let guesses = parseInt(e.target.guesses.value);
+        let clueEntry = document.createElement('li')
+        guessLimit = guesses + 1 ;
+        clueEntry.innerText = `${clue} ${guesses}`
+        alert(`You have ${guessLimit} guesses remaining.`)
+            if (currentTeam === `${teamArray[2].id}`){ 
+            let ul = document.getElementById('red-team-ul')
+            ul.appendChild(clueEntry)
+            }
+            else{ 
+                let ul = document.getElementById('blue-team-ul')
+                ul.appendChild(clueEntry)
+            }
+    
+        clueFormStyle()
+        }
+
     }
     
-    clueFormStyle()
-    }
-
-}
-    
-e.target.reset()
+    e.target.reset()
 }
 
 function resetGameHandler(event){
@@ -304,6 +351,8 @@ function resetGameHandler(event){
     bluePoints = 0;
     redPoints = 0;
     clueWindow.close();
+    clueWindow = undefined;
+    firstGuess = false;
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
@@ -464,3 +513,5 @@ function animateCard(event){
     event.target.classList.add('animate-card')
    setTimeout( () =>event.target.classList.add('tiny-card'),1000)
 }
+
+
