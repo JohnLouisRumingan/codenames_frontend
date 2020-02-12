@@ -131,7 +131,9 @@ function populateCards(wordArray){
       
     gameWords = wordShuffler(gameWords);
     for(let i = 0; i<gameWords.length; i++){
-        renderCard(gameWords[i], i)
+        console.log(2000*i)
+        
+        setTimeout(() => renderCard(gameWords[i], i),100*i)
     }
     gameWords.forEach(word => {
         wordList.push(word.name.toLowerCase());
@@ -140,6 +142,7 @@ function populateCards(wordArray){
 }
 
 function renderCard(word, index){
+    
     let wordContainer = getWordContainer();
     let newCardDiv = document.createElement('div');
     newCardDiv.innerText = word.name;
@@ -148,7 +151,7 @@ function renderCard(word, index){
     newCardDiv.className = "word-card";
     newCardDiv.addEventListener('click', (e) => wordHandler(e))
     wordContainer.append(newCardDiv);
-    
+    newCardDiv.addEventListener('click', animateCard)
 }
 
 
@@ -179,6 +182,9 @@ function wordHandler(event){
      console.log(`This card belongs to ${teamNumber}`)
 
      let chosenWordCard = event.target;
+     
+     
+
    if (guessLimit === 0){ 
        alert("You've run out of clues")
        switchTurn()
@@ -201,14 +207,18 @@ function wordHandler(event){
         event.target.style.backgroundColor = teamColorRed
         guessLimit--
         
+
         
-        chosenWordCard.className = "tiny-card";
+
+        // chosenWordCard.classList.add('tiny-card');
         getRedContainer().append(chosenWordCard);
         
         if(currentTurn()===`${teamArray[3].id}`){
             guessLimit = 0;
+            
+        
             alert("You've chosen an opponent team's card! Your turn is now ended.")
-            wordHandler(event);
+            setTimeOut(() =>wordHandler(event),200);
         }
     }
     else if(teamNumber===`${teamArray[3].id}`){
@@ -216,13 +226,21 @@ function wordHandler(event){
         guessLimit--
 
         
-        chosenWordCard.className = "tiny-card";
+      
+
+            //    chosenWordCard.classList.add('tiny-card');
+
+        
         getBlueContainer().append(chosenWordCard);
 
         if(currentTurn()===`${teamArray[2].id}`){
             guessLimit = 0;
             alert("You've chosen an opponent team's card! Your turn is now ended.")
-            wordHandler(event);
+            
+            setTimeOut(() =>wordHandler(event),200);
+
+             
+            
         }
     }
     alert(`You have ${guessLimit} guesses left.`)
@@ -256,6 +274,7 @@ function clueFormHandler(e, currentTeam){
 
     let guesses = parseInt(e.target.guesses.value);
     let clueEntry = document.createElement('li')
+    clueEntry.classList += "restored-item"
     guessLimit = guesses + 1 ;
     clueEntry.innerText = `${clue} ${guesses}`
     alert(`You have ${guessLimit} guesses remaining.`)
@@ -439,4 +458,9 @@ function clueFormStyle(){
     else if(form.style.display === 'none'){ 
         form.style.display = ""
     }
+}
+
+function animateCard(event){ 
+    event.target.classList.add('animate-card')
+   setTimeout( () =>event.target.classList.add('tiny-card'),1000)
 }

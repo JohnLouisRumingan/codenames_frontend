@@ -22,6 +22,9 @@ button {
     line-height: 14rem;
     background-image: url("https://kid101.com/wp-content/uploads/2017/10/Spy-Training.jpg");
     background-size: 23rem;
+    animation: bounce-in-top;
+    animation-duration: 2s;
+    
   }
 
   .word-card:hover {
@@ -44,6 +47,7 @@ button {
     line-height: 5rem;
     background-image: url("https://kid101.com/wp-content/uploads/2017/10/Spy-Training.jpg");
     background-size: 12rem;
+    
   }
 
   .master-card {
@@ -61,4 +65,99 @@ button {
     line-height: 1rem;
     background-size: 12rem;
   }
+  .restored-item {
+    transform: translateX(300px);
+    animation: 
+        openspace .3s ease forwards, 
+        restored-item-animation .5s .3s cubic-bezier(.14,.25,.52,1.56) forwards;
+}
+.animate-card{ 
+  animation-name: roll-in-blurred-top;
+  animation-duration: 1s;
+}
+
+
  
+@keyframes openspace {
+    to {
+        height: auto;
+    }
+}
+ 
+@keyframes restored-item-animation {
+    0% {
+        opacity: 0;
+         transform: translateX(300px);
+    }
+ 
+    70% {
+        opacity: 1;
+        transform: translateX(-50px);
+    }
+ 
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes roll-out-top {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-800px) rotate(-540deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-in-top {
+  0% {
+    transform: translateY(-500px);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  38% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(-65px);
+    animation-timing-function: ease-in;
+  }
+  72% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  81% {
+    transform: translateY(-28px);
+    animation-timing-function: ease-in;
+  }
+  90% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  95% {
+    transform: translateY(-8px);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+}
+
+
+@keyframes roll-in-blurred-top {
+  0% {
+    transform: translateY(-800px) rotate(-720deg);
+    filter: blur(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
