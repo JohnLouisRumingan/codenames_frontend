@@ -327,7 +327,10 @@ function clueFormHandler(e, currentTeam){
 
             let guesses = parseInt(e.target.guesses.value);
             let clueEntry = document.createElement('li')
-            guessLimit = guesses + 1 ;
+            
+            if(guesses===0){guessLimit = 99}
+            else{guessLimit = guesses + 1}
+
             clueEntry.innerText = `${clue} ${guesses}`
             alert(`You have ${guessLimit} guesses remaining.`)
                 if (currentTeam === `${teamArray[2].id}`){ 
@@ -356,10 +359,13 @@ function resetGameHandler(event){
     wordList = [];
     bluePoints = 0;
     redPoints = 0;
+    if(clueWindow){
     clueWindow.close();
     clueWindow = undefined;
+    }
     firstGuess = false;
     clueBeforeGuess = false;
+    gameContinue = true;
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
