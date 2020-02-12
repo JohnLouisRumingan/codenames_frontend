@@ -6,7 +6,7 @@ let wordList = [];
 let bluePoints; // number of guesses team must have to win. 9 if first team, 8 if second
 let redPoints;  
 let clueWindow = undefined;
-let firstGuess = false; // you cannot pass the turn without guessing at least one card - working
+let firstGuess = false; // you cannot pass the turn without guessing at least one card
 let clueBeforeGuess = false;  // you cannot guess before a clue is given
 
 const teamColorRed = '#AA2D19'
@@ -165,17 +165,18 @@ function makeRules(){
     let rulesString = `
     <p>
     Game Setup<br>
-    Make 2 teams, Red and Blue, and choose a Spymaster for each team. Teams don’t have to be even.<br>
+    • Make 2 teams, Red and Blue, and choose a Spymaster for each team. Teams don’t have to be even.<br>
     • Spymasters and teammates sit on opposite sides of table. Spymasters manage Agent cards for team.<br>
     • Game will randomly choose 25 codenames cards. These will be assigned to red team, blue team, assassin, and neutral.<br>
     • The first team must get 9 codenames correct (vs 8 for 2nd team)<br>
     </p>
     <p>
     Game Play<br>
-    • Spymaster gives 1 word + 1 number clue (ex: tree; 2) and can give no other clues of any kind.<br>
-    • Team debates then touches a card. If it belongs to their team, the spymaster covers with team color<br>
+    • Spymaster gives 1 word + 1 number clue (e.g.: tree 2) and can give no other clues of any kind.<br>
+    • If Spymaster says a clue that is a word on the list, the team forfeits their turn.<br>
+    • Team debates then touches a card. If it belongs to their team, the spymaster places that card in their team container<br>
     and they can guess again, up to the # of clues + 1. Must always make at least 1 guess.<br>
-    • If Innocent Bystander or other team color, cover with respective card, turn is over<br>
+    • If Innocent Bystander or other team color, places the card in the appropriate container, and their turn is over.<br>
     • If Assassin, game is over, team loses<br>
     • If Spymaster gives invalid clue, turn is over. No clues other than word and #. Timer is optional.</p>`;
     rulesDiv.innerHTML = rulesString;
@@ -242,6 +243,8 @@ function wordHandler(event){
                 event.target.style.backgroundColor = 'beige'
                 guessLimit = 0;
                 alert("You've hit a neutral target. Your turn is now ended.")
+                chosenWordCard.className = "tiny-card";
+                getNeutralContainer().append(chosenWordCard);
                 wordHandler(event);
             }
             else if(teamNumber===`${teamArray[2].id}`){
@@ -273,7 +276,9 @@ function wordHandler(event){
                 }
             }
         }
+        if(guessLimit!== 0){
         alert(`You have ${guessLimit} guesses left.`)
+        }
     }
     else{
         alert(`You must enter a clue before you can guess a word.`)
@@ -348,12 +353,14 @@ function resetGameHandler(event){
     clueWindow.close();
     clueWindow = undefined;
     firstGuess = false;
+    clueBeforeGuess = false;
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
     deleteChildElements(document.getElementById('blue-team-ul'));
     deleteChildElements(document.getElementById('blue-team-container'));
     deleteChildElements(document.getElementById('red-team-container'));
+    deleteChildElements(document.getElementById('neutral-team-container'));
 
     deleteChildElements(document.getElementById('master-key-card'));
     document.querySelector('#current-turn').dataset.id = ""
@@ -401,6 +408,10 @@ function getRedContainer(){
 
 function getBlueContainer(){
     return document.getElementById('blue-team-container')
+}
+
+function getNeutralContainer(){
+    return document.getElementById('neutral-team-container');
 }
 
 // Api fecthes and renders

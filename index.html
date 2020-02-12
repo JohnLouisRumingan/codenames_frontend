@@ -15,16 +15,16 @@
 
 
     </head>
-    <body>
+    <body id='entire-body'>
         <h1 id="codenames-header">Codenames</h1>
         <button id='reset-game' class ="ui green button">Reset game</button>
         <div id='master-key-card'></div>
-        <div id='rules-card'>Rules Card:</div>
         <p>
             <br>
             <button id="rules-button" class = "ui brown button">Rules</button>
             <button id="master-key-button" class = "ui brown button">See the clue card</button>
         </p>
+        <div id='rules-card'>Rules Card:</div>
         <div class= "ui text container">
         <div class= "ui form">
         <form id='clue-form' class="required field">
@@ -64,9 +64,8 @@
         <div id="blue-team-container">Collected blue cards:<br></div>
         <div id='blue-team-clue-container'>Blue Team Clue Container
             <ul id = "blue-team-ul"></ul>
-
-    
         </div>
+        <div id='neutral-team-container'>Collected neutral cards:</div>
         <div id="current-turn" data-id =""> Current Turn</div>
         <button id="pass-turn-button" class ="ui black button">  Pass the Turn </button>
         <div id="word-card-container"></div>
