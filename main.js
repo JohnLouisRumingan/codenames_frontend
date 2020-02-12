@@ -1,4 +1,5 @@
 let masterKeyShowing = false 
+let rulesShowing = true;
 let teamArray;
 let guessLimit
 let wordList = [];
@@ -17,29 +18,16 @@ document.addEventListener("DOMContentLoaded", (e)=> {
 
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
-    
+    const rulesButton = document.querySelector('#rules-button');
+    const rulesCard = document.querySelector('#rules-card');
     
     masterKeyCard.style.display = "none";
+    rulesCard.style.display = "block";
 
-    masterKeyBtn.addEventListener('click', (e) => {
+    masterKeyBtn.addEventListener('click', (e) => masterKeyHandler(e, masterKeyCard));
+    rulesButton.addEventListener('click', (e)=> rulesHandler(e, rulesCard));
 
-        //shows and hides the clue card
-        masterKeyShowing = !masterKeyShowing;
-        if (masterKeyShowing){
-            // masterKeyCard.style.display = 'block'
-
-            //shows new clue window
-            if(!clueWindow){
-            clueWindow = window.open('clues.html', '_blank');
-            }
-        }
-        else{
-            masterKeyCard.style.display = 'none'
-
-            //closes clue window
-            // clueWindow.close();
-        }
-    });
+    makeRules();
     fetchTeams();
     getPassTurnButton().addEventListener('click', switchTurn)
     getClueForm().addEventListener('submit', (e) => clueFormHandler(e,currentTurn() ))
@@ -151,8 +139,6 @@ function renderCard(word, index){
     
 }
 
-
-
 function wordShuffler(array) {
     let newArray = array;
     let i = newArray.length,
@@ -172,7 +158,63 @@ function wordShuffler(array) {
     return newArray;
 }
 
+function makeRules(){
+    let rulesDiv = document.querySelector('#rules-card');
+    let rulesString = `
+    <p>
+    Game Setup<br>
+    Make 2 teams, Red and Blue, and choose a Spymaster for each team. Teams don’t have to be even.<br>
+    • Spymasters and teammates sit on opposite sides of table. Spymasters manage Agent cards for team.<br>
+    • Game will randomly choose 25 codenames cards. These will be assigned to red team, blue team, assassin, and neutral.<br>
+    • The first team must get 9 codenames correct (vs 8 for 2nd team)<br>
+    </p>
+    <p>
+    Game Play<br>
+    • Spymaster gives 1 word + 1 number clue (ex: tree; 2) and can give no other clues of any kind.<br>
+    • Team debates then touches a card. If it belongs to their team, the spymaster covers with team color<br>
+    and they can guess again, up to the # of clues + 1. Must always make at least 1 guess.<br>
+    • If Innocent Bystander or other team color, cover with respective card, turn is over<br>
+    • If Assassin, game is over, team loses<br>
+    • If Spymaster gives invalid clue, turn is over. No clues other than word and #. Timer is optional.</p>`;
+    rulesDiv.innerHTML = rulesString;
+}
+
 // event handlers
+
+function rulesHandler(event, rulesCard){
+
+    console.log('You clicked on the rules')
+    rulesShowing = !rulesShowing;
+
+    if(rulesShowing){
+        rulesCard.style.display = 'block';
+    }
+    else{
+        rulesCard.style.display = 'none';
+    }
+}
+
+function masterKeyHandler(event, masterKeyCard){
+        //shows and hides the clue card
+        masterKeyShowing = !masterKeyShowing;
+        if (masterKeyShowing){
+            // line below shows the keycard to the same page. Use this with the if statement so new windows don't show up every time.
+            // masterKeyCard.style.display = 'block'
+
+            //shows new clue window
+            //If not used with the above, comment out the if statement so you can open up new windows if accidentally closed.
+            // if(!clueWindow){
+            clueWindow = window.open('clues.html', '_blank');
+            // }
+        }
+        else{
+            masterKeyCard.style.display = 'none'
+
+            //closes clue window
+            // clueWindow.close();
+        }
+}
+
 function wordHandler(event){
     
      let teamNumber = event.target.dataset['team'];
@@ -285,6 +327,7 @@ function resetGameHandler(event){
     bluePoints = 0;
     redPoints = 0;
     clueWindow.close();
+    clueWindow = undefined;
     deleteChildElements(getWordContainer());
     deleteChildElements(getCurrentTurn());
     deleteChildElements(document.getElementById('red-team-ul'));
