@@ -336,7 +336,7 @@ function wordHandler(event){
             Swal.fire('Must Enter A clue')
         }
     }
-    else if(!gameContinue){alert('The game is over.')}
+    else if(!gameContinue){Swal.fire('The game is over.')}
 }
 
 function switchTurn(e){ 
@@ -450,7 +450,8 @@ function resetGameHandler(event){
     deleteChildElements(document.getElementById('master-key-card'));
     document.querySelector('#current-turn').dataset.id = ""
     fetchTeams();
-    clueFormStyle()
+    // clueFormStyle()
+    getClueForm().style.display = "";
     
     // setCurrentTurnText();
     document.querySelector('#master-key-card').style.display = "none";
