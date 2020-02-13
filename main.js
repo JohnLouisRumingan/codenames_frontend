@@ -17,6 +17,7 @@ const teamColorNeutral = 'beige';
 
 document.addEventListener("DOMContentLoaded", (e)=> {
     console.log('connected to main.js')
+    document.getElementById('whole-body').style.display ="none"
     Swal.fire({
         title: 'Welcome to Codenames!',
         width: 300,
@@ -26,9 +27,14 @@ document.addEventListener("DOMContentLoaded", (e)=> {
           rgba(0,0,123,0.4)
           url("https://media.giphy.com/media/oIjmUZ70SzCIU/giphy.gif")
          center top
-          no-repeat
-        `
-      })
+          no-repeat`
+    }).then(result => { 
+   if (result.value){ 
+    document.getElementById('whole-body').style.display =""
+
+   }
+    })
+      
     
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
