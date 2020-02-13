@@ -17,6 +17,18 @@ const teamColorNeutral = 'beige';
 
 document.addEventListener("DOMContentLoaded", (e)=> {
     console.log('connected to main.js')
+    Swal.fire({
+        title: 'Welcome to Codenames!',
+        width: 300,
+        padding: '3em',
+        confirmButtonText: 'Play!',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("https://media.giphy.com/media/oIjmUZ70SzCIU/giphy.gif")
+         center top
+          no-repeat
+        `
+      })
     
     const masterKeyBtn = document.querySelector('#master-key-button');
     const masterKeyCard = document.querySelector('#master-key-card');
@@ -236,14 +248,24 @@ function wordHandler(event){
 
             let chosenWordCard = event.target;
             if (guessLimit === 0){ 
-                alert("You've run out of clues")
                 switchTurn()
             } 
             else {
                 
                 if(teamNumber=== `${teamArray[0].id}`){
                     // event.target.style.backgroundColor = teamColorAssasin
-                alert("You hit the assasin. Game over.")
+                    Swal.fire({
+                        title: 'You hit the assasin!',
+                        width: 300,
+                        padding: '3em',
+                        confirmButtonText: 'I lost',
+                        backdrop: `
+                          rgba(0,0,123,0.4)
+                          url("https://media2.giphy.com/media/11bV8o4fJ3vpOE/giphy.gif")
+                         center top
+                          no-repeat
+                        `
+                      })
                 guessLimit = 0
                 gameContinue = false;
                 }
@@ -251,8 +273,13 @@ function wordHandler(event){
                     // event.target.style.backgroundColor = 'beige'
                     document.getElementById('neutral-modal-container').appendChild(chosenWordCard)
                     guessLimit = 0;
-                    alert("You've hit a neutral target. Your turn is now ended.")
-                    wordHandler(event);
+                    Swal.fire(
+                        'Uh-oh',
+                        "You hit a neutral card Your turn is up.",
+                        'warning'
+                      )
+                      setTimeOut(() => wordHandler(event), 500)
+
                 }
                 else if(teamNumber===`${teamArray[2].id}`){
                     // event.target.style.backgroundColor = teamColorRed
@@ -263,12 +290,16 @@ function wordHandler(event){
                         
                     if(currentTurn()===`${teamArray[3].id}`){
                         guessLimit = 0;
-                        alert("You've chosen an opponent team's card! Your turn is now ended.")
-                        wordHandler(event);
+                        Swal.fire(
+                            'Yikes',
+                            "You hit an opponment card! Your turn is up.",
+                            'error'
+                          )
+                        setTimeOut(() => wordHandler(event), 500)
                     }
                 }
                 else if(teamNumber===`${teamArray[3].id}`){
-                    event.target.style.backgroundColor = teamColorBlue
+                    // event.target.style.backgroundColor = teamColorBlue
                     guessLimit--
 
                         
@@ -278,13 +309,22 @@ function wordHandler(event){
 
                     if(currentTurn()===`${teamArray[2].id}`){
                         guessLimit = 0;
-                        alert("You've chosen an opponent team's card! Your turn is now ended.")
-                        wordHandler(event);
+                        Swal.fire(
+                            'Yikes',
+                            "You hit an opponment card! Your turn is up.",
+                            'error'
+                          )
+                          setTimeOut(() => wordHandler(event), 500)
+                          
                     }
                 }
 
                 if(guessLimit!== 0){
-                alert(`You have ${guessLimit} guesses left.`)
+                    Swal.fire('Nice Guess',
+                        `You have ${guessLimit} guesses left.`, 
+                        'success'
+                        )
+                
                 }
             }
 
@@ -292,7 +332,7 @@ function wordHandler(event){
             countBlueCards();
         }
         else{
-            alert(`You must enter a clue before you can guess a word.`)
+            Swal.fire('Must Enter A clue')
         }
     }
     else if(!gameContinue){alert('The game is over.')}
@@ -306,7 +346,11 @@ function switchTurn(e){
   clueBeforeGuess = false;
   }
   else if(!firstGuess){
-      alert('You must guess at least once')
+    Swal.fire(
+        'Guess',
+         `You must guess atleast once`,
+        'error'
+      )
   }
 }
 
@@ -318,7 +362,12 @@ function clueFormHandler(e, currentTeam){
     
     if(gameContinue){
         if(clue === ""){ 
-            alert("Please enter a clue")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please enter a clue',
+                
+              })
         }
         else{
 
@@ -339,7 +388,10 @@ function clueFormHandler(e, currentTeam){
             else{guessLimit = guesses + 1}
 
             clueEntry.innerText = `${clue} ${guesses}`
-            alert(`You have ${guessLimit} guesses remaining.`)
+            
+            Swal.fire(
+                `You have ${guessLimit} guesses left.`,
+                )
                 if (currentTeam === `${teamArray[2].id}`){ 
                     let ul = document.getElementById('red-team-ul')
                     ul.appendChild(clueEntry)
@@ -360,7 +412,18 @@ function clueFormHandler(e, currentTeam){
 
 function resetGameHandler(event){
  
-    alert('Resetting game...')
+    Swal.fire({
+        title: 'Resetting Game....',
+        width: 300,
+        padding: '3em',
+        confirmButtonText: 'Play!',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("https://media.giphy.com/media/UN4H6F7yjLGeY/giphy.gif")
+         center top
+          no-repeat
+        `
+      })
     teamArray = null;
     guessLimit = null;
     wordList = [];
@@ -474,11 +537,21 @@ function setCurrentTurnText(switchTurn){
         else if(switchTurn){ 
             if (div.dataset.id === `${teamArray[2].id}`){ 
                 div.dataset.id = `${teamArray[3].id}`
+                Swal.fire(
+                    'Youre Up!',
+                     `It's ${teamArray[3].name}'s turn`,
+                    'info'
+                  )
                 div.innerText = `It's ${teamArray[3].name}'s turn`
             }
             else if (div.dataset.id = `${teamArray[3].id}` ){ 
                 div.dataset.id = `${teamArray[2].id}`
                 div.innerText = `It's ${teamArray[2].name}'s turn`
+                Swal.fire(
+                    'Youre Up!',
+                     `It's ${teamArray[2].name}'s turn`,
+                    'info'
+                  )
             }
             appearClueForm()
         }
@@ -495,7 +568,18 @@ function countRedCards(){
     let redCards = getRedModal().childElementCount
 
     if (redCards === redPoints){
-        alert("Red Team has won!")
+        Swal.fire({
+            title: 'Red Team Has Won!',
+            width: 300,
+            padding: '3em',
+            confirmButtonText: 'Wohoo!',
+            backdrop: `
+              rgba(0,0,123,0.4)
+              url("https://media.giphy.com/media/l1tN8dLRdtzU24pTod/giphy.gif")
+             center top
+              no-repeat
+            `
+          })
         gameContinue = false;
     }
 }
@@ -506,7 +590,18 @@ function countBlueCards(){
     let blueCards = getBlueModal().childElementCount
 
     if (blueCards === bluePoints){
-        alert("Blue Team has won!")
+        Swal.fire({
+            title: 'Red Team Has Won!',
+            width: 300,
+            padding: '3em',
+            confirmButtonText: 'Wohoo!',
+            backdrop: `
+              rgba(0,0,123,0.4)
+              url("https://media.giphy.com/media/5yjYSCkSpLU3e/giphy.gif")
+             center top
+              no-repeat
+            `
+          })
         gameContinue = false;
     }
 }
